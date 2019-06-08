@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Threading.Tasks;
 
 namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
 {
@@ -41,9 +41,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         [TestMethod]
         public async Task MakeNoModificationGivenNoRedirectNeeded()
         {
-            var ruleOptions = new CanonicalUrlOptions
-            {
-            };
+            var ruleOptions = new CanonicalUrlOptions();
             var rule = new RedirectToCanonicalUrlRule(ruleOptions);
             var options = new RewriteOptions();
             options.Rules.Add(rule);

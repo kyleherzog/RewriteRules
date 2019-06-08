@@ -1,22 +1,20 @@
-﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
 namespace RewriteRules
 {
     public class CanonicalUrlOptions
     {
-        public int StatusCode { get; set; } = StatusCodes.Status301MovedPermanently;
+        public IList<HostString> AlternateHosts { get; } = new List<HostString>();
 
-        public TrailingSlashAction TrailingSlash { get; set; }
+        public IList<string> ExtensionsToInclude { get; } = new List<string> { ".html", ".htm", ".aspx", ".asp" };
 
         public bool IsForcingLowercase { get; set; } = true;
 
         public HostString PrimaryHost { get; set; }
 
-        public IList<HostString> AlternateHosts { get; } = new List<HostString>();
+        public int StatusCode { get; set; } = StatusCodes.Status301MovedPermanently;
 
-        public IList<string> ExtensionsToInclude { get; } = new List<string> { ".html", ".htm", ".aspx", ".asp"};
+        public TrailingSlashAction TrailingSlash { get; set; }
     }
 }

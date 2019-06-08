@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
-using System;
-using System.Globalization;
-using System.IO;
-using System.Linq;
 
 namespace RewriteRules
 {
