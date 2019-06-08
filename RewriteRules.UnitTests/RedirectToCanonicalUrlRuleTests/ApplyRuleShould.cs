@@ -31,7 +31,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
             {
                 server.BaseAddress = new Uri("http://example.com");
                 var client = server.CreateClient();
-                var response = await client.GetAsync("foobar").ConfigureAwait(true);
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}foobar")).ConfigureAwait(true);
 
                 Assert.AreEqual(StatusCodes.Status301MovedPermanently, (int)response.StatusCode);
                 Assert.AreEqual("http://example.com/foobar/", response.Headers.Location.OriginalString);
@@ -54,7 +54,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
             {
                 server.BaseAddress = new Uri("http://something.com");
                 var client = server.CreateClient();
-                var response = await client.GetAsync("foo").ConfigureAwait(true);
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}foo")).ConfigureAwait(true);
 
                 Assert.AreEqual(StatusCodes.Status404NotFound, (int)response.StatusCode);
             }
@@ -80,7 +80,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
             {
                 server.BaseAddress = new Uri("http://something.com");
                 var client = server.CreateClient();
-                var response = await client.GetAsync("FOo.jpg").ConfigureAwait(true);
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}FOo.jpg")).ConfigureAwait(true);
 
                 Assert.AreEqual(StatusCodes.Status404NotFound, (int)response.StatusCode);
             }
@@ -106,7 +106,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
             {
                 server.BaseAddress = new Uri("http://example.com");
                 var client = server.CreateClient();
-                var response = await client.GetAsync("foobar.txt").ConfigureAwait(true);
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}foobar.txt")).ConfigureAwait(true);
 
                 Assert.AreEqual(StatusCodes.Status404NotFound, (int)response.StatusCode);
             }
@@ -132,7 +132,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
             {
                 server.BaseAddress = new Uri("http://example.com");
                 var client = server.CreateClient();
-                var response = await client.GetAsync("foobar/").ConfigureAwait(true);
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}foobar/")).ConfigureAwait(true);
 
                 Assert.AreEqual(StatusCodes.Status404NotFound, (int)response.StatusCode);
             }
@@ -158,7 +158,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
             {
                 server.BaseAddress = new Uri("http://example.com");
                 var client = server.CreateClient();
-                var response = await client.GetAsync("foobar").ConfigureAwait(true);
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}foobar")).ConfigureAwait(true);
 
                 Assert.AreEqual(StatusCodes.Status404NotFound, (int)response.StatusCode);
             }
@@ -185,7 +185,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
             {
                 server.BaseAddress = new Uri("http://something.com");
                 var client = server.CreateClient();
-                var response = await client.GetAsync("foo.JPG").ConfigureAwait(true);
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}foo.JPG")).ConfigureAwait(true);
 
                 Assert.AreEqual(StatusCodes.Status301MovedPermanently, (int)response.StatusCode);
                 Assert.AreEqual("http://example.com/foo.jpg", response.Headers.Location.OriginalString);
@@ -211,7 +211,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
             {
                 server.BaseAddress = new Uri("http://something.com");
                 var client = server.CreateClient();
-                var response = await client.GetAsync("foo").ConfigureAwait(true);
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}foo")).ConfigureAwait(true);
 
                 Assert.AreEqual(StatusCodes.Status301MovedPermanently, (int)response.StatusCode);
                 Assert.AreEqual("http://example.com/foo", response.Headers.Location.OriginalString);
@@ -234,7 +234,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
             {
                 server.BaseAddress = new Uri("http://example.com");
                 var client = server.CreateClient();
-                var response = await client.GetAsync("fooBar").ConfigureAwait(true);
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}fooBar")).ConfigureAwait(true);
 
                 Assert.AreEqual(StatusCodes.Status301MovedPermanently, (int)response.StatusCode);
                 Assert.AreEqual("http://example.com/foobar", response.Headers.Location.OriginalString);
@@ -260,7 +260,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
             {
                 server.BaseAddress = new Uri("http://example.com");
                 var client = server.CreateClient();
-                var response = await client.GetAsync("foobar/").ConfigureAwait(true);
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}foobar/")).ConfigureAwait(true);
 
                 Assert.AreEqual(StatusCodes.Status301MovedPermanently, (int)response.StatusCode);
                 Assert.AreEqual("http://example.com/foobar", response.Headers.Location.OriginalString);
