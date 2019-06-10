@@ -52,7 +52,7 @@ namespace RewriteRules
             }
 
             var host = request.Host;
-            if (Options.PrimaryHost.HasValue && host != Options.PrimaryHost && !Options.AlternateHosts.Contains(host))
+            if (Options.PrimaryHost.HasValue && host != Options.PrimaryHost && !host.Value.StartsWith("localhost", StringComparison.OrdinalIgnoreCase) && !Options.AlternateHosts.Contains(host))
             {
                 host = Options.PrimaryHost;
             }
