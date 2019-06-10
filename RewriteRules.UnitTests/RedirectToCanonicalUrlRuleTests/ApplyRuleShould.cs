@@ -157,6 +157,30 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         }
 
         [TestMethod]
+        public async Task MakeNoModifictionGivenUrlIsLocalHost()
+        {
+            var canonicalOptions = new CanonicalUrlOptions
+            {
+                PrimaryHost = new HostString("example.com")
+            };
+
+            var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
+            var builder = new WebHostBuilder()
+            .Configure(app =>
+            {
+                app.UseRewriter(options);
+            });
+            using (var server = new TestServer(builder))
+            {
+                server.BaseAddress = new Uri("http://localhost:12345");
+                var client = server.CreateClient();
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}foo")).ConfigureAwait(true);
+
+                Assert.AreEqual(StatusCodes.Status404NotFound, (int)response.StatusCode);
+            }
+        }
+
+        [TestMethod]
         public async Task MakesNoModificationGivenAddTrailingSlashSetButPresent()
         {
             var canonicalOptions = new CanonicalUrlOptions()
