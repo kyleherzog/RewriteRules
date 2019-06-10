@@ -3,9 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29001.49
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RewriteRules", "RewriteRules\RewriteRules.csproj", "{E1D27BF8-FBAC-4DAD-93C3-D53B68E6F351}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RewriteRules", "RewriteRules\RewriteRules.csproj", "{E1D27BF8-FBAC-4DAD-93C3-D53B68E6F351}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RewriteRules.UnitTests", "RewriteRules.UnitTests\RewriteRules.UnitTests.csproj", "{FC834279-8B98-4F3A-8D69-70DBAF42CFB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RewriteRules.UnitTests", "RewriteRules.UnitTests\RewriteRules.UnitTests.csproj", "{FC834279-8B98-4F3A-8D69-70DBAF42CFB2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F43565D5-BC63-4F9E-9714-EC794DC34150}"
+	ProjectSection(SolutionItems) = preProject
+		CHANGELOG.md = CHANGELOG.md
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -12,6 +12,11 @@ namespace RewriteRules
 {
     public class RedirectToCanonicalUrlRule : IRule
     {
+        public RedirectToCanonicalUrlRule()
+            : this(new CanonicalUrlOptions())
+        {
+        }
+
         public RedirectToCanonicalUrlRule(CanonicalUrlOptions options)
         {
             Options = options;

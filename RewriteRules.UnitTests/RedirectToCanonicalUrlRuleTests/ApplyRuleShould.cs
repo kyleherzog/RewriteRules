@@ -13,15 +13,14 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
     public class ApplyRuleShould
     {
         [TestMethod]
-        public async Task AddsTrailingSlashGivenTrailingSlashSetToAdd()
+        public async Task AddTrailingSlashGivenTrailingSlashSetToAdd()
         {
-            var ruleOptions = new CanonicalUrlOptions
+            var canonicalOptions = new CanonicalUrlOptions
             {
                 TrailingSlash = TrailingSlashAction.Add
             };
-            var rule = new RedirectToCanonicalUrlRule(ruleOptions);
-            var options = new RewriteOptions();
-            options.Rules.Add(rule);
+
+            var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
             var builder = new WebHostBuilder()
             .Configure(app =>
             {
@@ -39,64 +38,15 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         }
 
         [TestMethod]
-        public async Task MakeNoModificationGivenNoRedirectNeeded()
+        public async Task MakeNoModificationGivenAddTrailingSlashSetButHasFileExtension()
         {
-            var ruleOptions = new CanonicalUrlOptions();
-            var rule = new RedirectToCanonicalUrlRule(ruleOptions);
-            var options = new RewriteOptions();
-            options.Rules.Add(rule);
-            var builder = new WebHostBuilder()
-            .Configure(app =>
-            {
-                app.UseRewriter(options);
-            });
-            using (var server = new TestServer(builder))
-            {
-                server.BaseAddress = new Uri("http://something.com");
-                var client = server.CreateClient();
-                var response = await client.GetAsync(new Uri($"{server.BaseAddress}foo")).ConfigureAwait(true);
-
-                Assert.AreEqual(StatusCodes.Status404NotFound, (int)response.StatusCode);
-            }
-        }
-
-        [TestMethod]
-        public async Task MakeNoModificationGivenPathWithExtensionAndNotIncluded()
-        {
-            var ruleOptions = new CanonicalUrlOptions
-            {
-                IsForcingLowercase = true
-            };
-
-            var rule = new RedirectToCanonicalUrlRule(ruleOptions);
-            var options = new RewriteOptions();
-            options.Rules.Add(rule);
-            var builder = new WebHostBuilder()
-            .Configure(app =>
-            {
-                app.UseRewriter(options);
-            });
-            using (var server = new TestServer(builder))
-            {
-                server.BaseAddress = new Uri("http://something.com");
-                var client = server.CreateClient();
-                var response = await client.GetAsync(new Uri($"{server.BaseAddress}FOo.jpg")).ConfigureAwait(true);
-
-                Assert.AreEqual(StatusCodes.Status404NotFound, (int)response.StatusCode);
-            }
-        }
-
-        [TestMethod]
-        public async Task MakesNoModificationGivenAddTrailingSlashSetButHasFileExtension()
-        {
-            var ruleOptions = new CanonicalUrlOptions()
+            var canonicalOptions = new CanonicalUrlOptions()
             {
                 TrailingSlash = TrailingSlashAction.Add
             };
 
-            var rule = new RedirectToCanonicalUrlRule(ruleOptions);
-            var options = new RewriteOptions();
-            options.Rules.Add(rule);
+            var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
+
             var builder = new WebHostBuilder()
             .Configure(app =>
             {
@@ -113,42 +63,14 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         }
 
         [TestMethod]
-        public async Task MakesNoModificationGivenAddTrailingSlashSetButPresent()
+        public async Task MakeNoModificationGivenForceRemoveTrailingSlashSetButNotPresent()
         {
-            var ruleOptions = new CanonicalUrlOptions()
-            {
-                TrailingSlash = TrailingSlashAction.Add
-            };
-
-            var rule = new RedirectToCanonicalUrlRule(ruleOptions);
-            var options = new RewriteOptions();
-            options.Rules.Add(rule);
-            var builder = new WebHostBuilder()
-            .Configure(app =>
-            {
-                app.UseRewriter(options);
-            });
-            using (var server = new TestServer(builder))
-            {
-                server.BaseAddress = new Uri("http://example.com");
-                var client = server.CreateClient();
-                var response = await client.GetAsync(new Uri($"{server.BaseAddress}foobar/")).ConfigureAwait(true);
-
-                Assert.AreEqual(StatusCodes.Status404NotFound, (int)response.StatusCode);
-            }
-        }
-
-        [TestMethod]
-        public async Task MakesNoModificationGivenForceRemoveTrailingSlashSetButNotPresent()
-        {
-            var ruleOptions = new CanonicalUrlOptions()
+            var canonicalOptions = new CanonicalUrlOptions()
             {
                 TrailingSlash = TrailingSlashAction.Remove
             };
 
-            var rule = new RedirectToCanonicalUrlRule(ruleOptions);
-            var options = new RewriteOptions();
-            options.Rules.Add(rule);
+            var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
             var builder = new WebHostBuilder()
             .Configure(app =>
             {
@@ -165,17 +87,111 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         }
 
         [TestMethod]
-        public async Task RedirectGivenExtensionPresentAndIncluded()
+        public async Task MakeNoModificationGivenNoRedirectNeeded()
         {
-            var ruleOptions = new CanonicalUrlOptions
+            var builder = new WebHostBuilder()
+            .Configure(app =>
+            {
+                var options = new RewriteOptions().AddRedirectToCanonicalUrl();
+                app.UseRewriter(options);
+            });
+            using (var server = new TestServer(builder))
+            {
+                server.BaseAddress = new Uri("http://something.com");
+                var client = server.CreateClient();
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}foo")).ConfigureAwait(true);
+
+                Assert.AreEqual(StatusCodes.Status404NotFound, (int)response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task MakeNoModificationGivenPathWithExtensionAndNotIncluded()
+        {
+            var canonicalOptions = new CanonicalUrlOptions
+            {
+                IsForcingLowercase = true
+            };
+
+            var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
+            var builder = new WebHostBuilder()
+            .Configure(app =>
+            {
+                app.UseRewriter(options);
+            });
+            using (var server = new TestServer(builder))
+            {
+                server.BaseAddress = new Uri("http://something.com");
+                var client = server.CreateClient();
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}FOo.jpg")).ConfigureAwait(true);
+
+                Assert.AreEqual(StatusCodes.Status404NotFound, (int)response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task MakeNoModifictionGivenPrimaryHostNameSpecifiedNotMatchingButIsAlternate()
+        {
+            var canonicalOptions = new CanonicalUrlOptions
             {
                 PrimaryHost = new HostString("example.com")
             };
-            ruleOptions.ExtensionsToInclude.Add(".jpg");
+            canonicalOptions.AlternateHosts.Add(new HostString("dev.example.com"));
+            canonicalOptions.AlternateHosts.Add(new HostString("test.example.com"));
+            canonicalOptions.AlternateHosts.Add(new HostString("stage.example.com"));
 
-            var rule = new RedirectToCanonicalUrlRule(ruleOptions);
-            var options = new RewriteOptions();
-            options.Rules.Add(rule);
+            var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
+            var builder = new WebHostBuilder()
+            .Configure(app =>
+            {
+                app.UseRewriter(options);
+            });
+            using (var server = new TestServer(builder))
+            {
+                server.BaseAddress = new Uri("http://test.example.com");
+                var client = server.CreateClient();
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}foo")).ConfigureAwait(true);
+
+                Assert.AreEqual(StatusCodes.Status404NotFound, (int)response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task MakesNoModificationGivenAddTrailingSlashSetButPresent()
+        {
+            var canonicalOptions = new CanonicalUrlOptions()
+            {
+                TrailingSlash = TrailingSlashAction.Add
+            };
+
+            var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
+
+            var builder = new WebHostBuilder()
+            .Configure(app =>
+            {
+                app.UseRewriter(options);
+            });
+            using (var server = new TestServer(builder))
+            {
+                server.BaseAddress = new Uri("http://example.com");
+                var client = server.CreateClient();
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}foobar/")).ConfigureAwait(true);
+
+                Assert.AreEqual(StatusCodes.Status404NotFound, (int)response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        public async Task RedirectGivenExtensionPresentAndIncluded()
+        {
+            var canonicalOptions = new CanonicalUrlOptions
+            {
+                PrimaryHost = new HostString("example.com")
+            };
+            canonicalOptions.ExtensionsToInclude.Add(".jpg");
+
+            var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
+
             var builder = new WebHostBuilder()
             .Configure(app =>
             {
@@ -195,13 +211,12 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         [TestMethod]
         public async Task RedirectGivenPrimaryHostNameSpecifiedButNotMatching()
         {
-            var ruleOptions = new CanonicalUrlOptions
+            var canonicalOptions = new CanonicalUrlOptions
             {
                 PrimaryHost = new HostString("example.com")
             };
-            var rule = new RedirectToCanonicalUrlRule(ruleOptions);
-            var options = new RewriteOptions();
-            options.Rules.Add(rule);
+            var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
+
             var builder = new WebHostBuilder()
             .Configure(app =>
             {
@@ -221,10 +236,8 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         [TestMethod]
         public async Task RedirectGivenUppercaseInUrlAndReqiringLowercase()
         {
-            var ruleOptions = new CanonicalUrlOptions();
-            var rule = new RedirectToCanonicalUrlRule(ruleOptions);
-            var options = new RewriteOptions();
-            options.Rules.Add(rule);
+            var options = new RewriteOptions().AddRedirectToCanonicalUrl();
+
             var builder = new WebHostBuilder()
             .Configure(app =>
             {
@@ -242,15 +255,40 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         }
 
         [TestMethod]
-        public async Task RemovesTrailingSlashGivenForceRemoveTrailingSlashSet()
+        public async Task RedirectWithCustomResponseCodeGivenCustomResponseCodeSpecified()
         {
-            var ruleOptions = new CanonicalUrlOptions
+            var canonicalOptions = new CanonicalUrlOptions
+            {
+                StatusCode = StatusCodes.Status302Found
+            };
+
+            var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
+
+            var builder = new WebHostBuilder()
+            .Configure(app =>
+            {
+                app.UseRewriter(options);
+            });
+            using (var server = new TestServer(builder))
+            {
+                server.BaseAddress = new Uri("http://example.com");
+                var client = server.CreateClient();
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}fooBar")).ConfigureAwait(true);
+
+                Assert.AreEqual(StatusCodes.Status302Found, (int)response.StatusCode);
+                Assert.AreEqual("http://example.com/foobar", response.Headers.Location.OriginalString);
+            }
+        }
+
+        [TestMethod]
+        public async Task RemoveTrailingSlashGivenForceRemoveTrailingSlashSet()
+        {
+            var canonicalOptions = new CanonicalUrlOptions
             {
                 TrailingSlash = TrailingSlashAction.Remove
             };
-            var rule = new RedirectToCanonicalUrlRule(ruleOptions);
-            var options = new RewriteOptions();
-            options.Rules.Add(rule);
+            var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
+
             var builder = new WebHostBuilder()
             .Configure(app =>
             {
