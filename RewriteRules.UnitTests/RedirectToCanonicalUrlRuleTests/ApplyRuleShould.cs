@@ -13,6 +13,25 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
     public class ApplyRuleShould
     {
         [TestMethod]
+        public async Task NotRedirectGivenEscapedCharacter()
+        {
+            var builder = new WebHostBuilder()
+                .Configure(app =>
+                {
+                    var options = new RewriteOptions().AddRedirectToCanonicalUrl();
+                    app.UseRewriter(options);
+                });
+            using (var server = new TestServer(builder))
+            {
+                server.BaseAddress = new Uri("http://something.com");
+                var client = server.CreateClient();
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}foo%3fp=1")).ConfigureAwait(true);
+
+                Assert.AreEqual(StatusCodes.Status404NotFound, (int)response.StatusCode);
+            }
+        }
+
+        [TestMethod]
         public async Task AddTrailingSlashGivenTrailingSlashSetToAdd()
         {
             var canonicalOptions = new CanonicalUrlOptions

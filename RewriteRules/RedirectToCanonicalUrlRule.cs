@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Rewrite;
@@ -64,7 +65,7 @@ namespace RewriteRules
                 newUrl = newUrl.ToLower(CultureInfo.CurrentCulture);
             }
 
-            if (originalUrl != newUrl)
+            if (HttpUtility.UrlDecode(originalUrl) != HttpUtility.UrlDecode(newUrl))
             {
                 var response = context.HttpContext.Response;
                 response.StatusCode = Options.StatusCode;
