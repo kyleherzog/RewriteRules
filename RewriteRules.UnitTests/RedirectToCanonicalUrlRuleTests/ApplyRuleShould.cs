@@ -13,11 +13,30 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
     public class ApplyRuleShould
     {
         [TestMethod]
+        public async Task NotRedirectGivenEscapedCharacter()
+        {
+            var builder = new WebHostBuilder()
+                .Configure(app =>
+                {
+                    var options = new RewriteOptions().AddRedirectToCanonicalUrl();
+                    app.UseRewriter(options);
+                });
+            using (var server = new TestServer(builder))
+            {
+                server.BaseAddress = new Uri("http://something.com");
+                var client = server.CreateClient();
+                var response = await client.GetAsync(new Uri($"{server.BaseAddress}foo%3fp=1")).ConfigureAwait(true);
+
+                Assert.AreEqual(StatusCodes.Status404NotFound, (int)response.StatusCode);
+            }
+        }
+
+        [TestMethod]
         public async Task AddTrailingSlashGivenTrailingSlashSetToAdd()
         {
             var canonicalOptions = new CanonicalUrlOptions
             {
-                TrailingSlash = TrailingSlashAction.Add
+                TrailingSlash = TrailingSlashAction.Add,
             };
 
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
@@ -42,7 +61,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions()
             {
-                TrailingSlash = TrailingSlashAction.Add
+                TrailingSlash = TrailingSlashAction.Add,
             };
 
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
@@ -67,7 +86,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions()
             {
-                TrailingSlash = TrailingSlashAction.Remove
+                TrailingSlash = TrailingSlashAction.Remove,
             };
 
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
@@ -110,7 +129,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions
             {
-                IsForcingLowercase = true
+                IsForcingLowercase = true,
             };
 
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
@@ -134,7 +153,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions
             {
-                PrimaryHost = new HostString("example.com")
+                PrimaryHost = new HostString("example.com"),
             };
             canonicalOptions.AlternateHosts.Add(new HostString("dev.example.com"));
             canonicalOptions.AlternateHosts.Add(new HostString("test.example.com"));
@@ -161,7 +180,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions
             {
-                PrimaryHost = new HostString("example.com")
+                PrimaryHost = new HostString("example.com"),
             };
 
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
@@ -185,7 +204,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions()
             {
-                TrailingSlash = TrailingSlashAction.Add
+                TrailingSlash = TrailingSlashAction.Add,
             };
 
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
@@ -210,7 +229,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions
             {
-                PrimaryHost = new HostString("example.com")
+                PrimaryHost = new HostString("example.com"),
             };
             canonicalOptions.ExtensionsToInclude.Add(".jpg");
 
@@ -237,7 +256,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions
             {
-                PrimaryHost = new HostString("example.com")
+                PrimaryHost = new HostString("example.com"),
             };
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
 
@@ -283,7 +302,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions
             {
-                StatusCode = StatusCodes.Status302Found
+                StatusCode = StatusCodes.Status302Found,
             };
 
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
@@ -309,7 +328,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions
             {
-                TrailingSlash = TrailingSlashAction.Remove
+                TrailingSlash = TrailingSlashAction.Remove,
             };
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
 
