@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Rewrite;
@@ -10,22 +11,41 @@ using Microsoft.Net.Http.Headers;
 
 namespace RewriteRules
 {
+    /// <summary>
+    /// A rewrite rule to redirect to a canonical URL.
+    /// </summary>
     public class RedirectToCanonicalUrlRule : IRule
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RedirectToCanonicalUrlRule"/> class.
+        /// </summary>
         public RedirectToCanonicalUrlRule()
             : this(new CanonicalUrlOptions())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RedirectToCanonicalUrlRule"/> class.
+        /// </summary>
+        /// <param name="options">The <see cref="CanonicalUrlOptions" /> to be applied.</param>
         public RedirectToCanonicalUrlRule(CanonicalUrlOptions options)
         {
             Options = options;
         }
 
+        /// <summary>
+        /// Gets the <see cref="CanonicalUrlOptions"/> that are to be used.
+        /// </summary>
         public CanonicalUrlOptions Options { get; }
 
+        /// <inheritdoc/>
         public void ApplyRule(RewriteContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             var request = context.HttpContext.Request;
 
             var originalUrl = request.GetDisplayUrl();
@@ -64,17 +84,13 @@ namespace RewriteRules
                 newUrl = newUrl.ToLower(CultureInfo.CurrentCulture);
             }
 
-            if (originalUrl != newUrl)
+            if (HttpUtility.UrlDecode(originalUrl) != HttpUtility.UrlDecode(newUrl))
             {
                 var response = context.HttpContext.Response;
                 response.StatusCode = Options.StatusCode;
                 response.Headers[HeaderNames.Location] = newUrl;
                 context.Result = RuleResult.EndResponse;
-                if (context.Logger != null)
-                {
-                    var message = LoggerMessage.Define(LogLevel.Information, 114, "Redirected to canonical URL");
-                    message(context.Logger, null);
-                }
+                context.Logger?.LogInformation("Redirected from {OriginalUrl} to canonical URL {NewUrl}", originalUrl, newUrl);
             }
             else
             {
