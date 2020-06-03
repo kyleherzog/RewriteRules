@@ -11,22 +11,41 @@ using Microsoft.Net.Http.Headers;
 
 namespace RewriteRules
 {
+    /// <summary>
+    /// A rewrite rule to redirect to a canonical URL.
+    /// </summary>
     public class RedirectToCanonicalUrlRule : IRule
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RedirectToCanonicalUrlRule"/> class.
+        /// </summary>
         public RedirectToCanonicalUrlRule()
             : this(new CanonicalUrlOptions())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RedirectToCanonicalUrlRule"/> class.
+        /// </summary>
+        /// <param name="options">The <see cref="CanonicalUrlOptions" /> to be applied.</param>
         public RedirectToCanonicalUrlRule(CanonicalUrlOptions options)
         {
             Options = options;
         }
 
+        /// <summary>
+        /// Gets the <see cref="CanonicalUrlOptions"/> that are to be used.
+        /// </summary>
         public CanonicalUrlOptions Options { get; }
 
+        /// <inheritdoc/>
         public void ApplyRule(RewriteContext context)
         {
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             var request = context.HttpContext.Request;
 
             var originalUrl = request.GetDisplayUrl();

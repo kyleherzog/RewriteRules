@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace RewriteRules
 {
+    /// <summary>
+    /// Defines the options for configuring how canonical URL redirection takes place.
+    /// </summary>
     public class CanonicalUrlOptions
     {
         /// <summary>

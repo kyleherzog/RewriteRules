@@ -36,7 +36,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions
             {
-                TrailingSlash = TrailingSlashAction.Add
+                TrailingSlash = TrailingSlashAction.Add,
             };
 
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
@@ -61,7 +61,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions()
             {
-                TrailingSlash = TrailingSlashAction.Add
+                TrailingSlash = TrailingSlashAction.Add,
             };
 
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
@@ -86,7 +86,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions()
             {
-                TrailingSlash = TrailingSlashAction.Remove
+                TrailingSlash = TrailingSlashAction.Remove,
             };
 
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
@@ -129,7 +129,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions
             {
-                IsForcingLowercase = true
+                IsForcingLowercase = true,
             };
 
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
@@ -153,7 +153,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions
             {
-                PrimaryHost = new HostString("example.com")
+                PrimaryHost = new HostString("example.com"),
             };
             canonicalOptions.AlternateHosts.Add(new HostString("dev.example.com"));
             canonicalOptions.AlternateHosts.Add(new HostString("test.example.com"));
@@ -180,7 +180,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions
             {
-                PrimaryHost = new HostString("example.com")
+                PrimaryHost = new HostString("example.com"),
             };
 
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
@@ -204,7 +204,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions()
             {
-                TrailingSlash = TrailingSlashAction.Add
+                TrailingSlash = TrailingSlashAction.Add,
             };
 
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
@@ -229,7 +229,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions
             {
-                PrimaryHost = new HostString("example.com")
+                PrimaryHost = new HostString("example.com"),
             };
             canonicalOptions.ExtensionsToInclude.Add(".jpg");
 
@@ -256,7 +256,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions
             {
-                PrimaryHost = new HostString("example.com")
+                PrimaryHost = new HostString("example.com"),
             };
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
 
@@ -302,7 +302,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions
             {
-                StatusCode = StatusCodes.Status302Found
+                StatusCode = StatusCodes.Status302Found,
             };
 
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
@@ -328,7 +328,7 @@ namespace RewriteRules.UnitTests.RedirectToCanonicalUrlRuleTests
         {
             var canonicalOptions = new CanonicalUrlOptions
             {
-                TrailingSlash = TrailingSlashAction.Remove
+                TrailingSlash = TrailingSlashAction.Remove,
             };
             var options = new RewriteOptions().AddRedirectToCanonicalUrl(canonicalOptions);
 
