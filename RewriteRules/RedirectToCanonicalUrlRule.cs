@@ -70,11 +70,7 @@ namespace RewriteRules
                 response.StatusCode = Options.StatusCode;
                 response.Headers[HeaderNames.Location] = newUrl;
                 context.Result = RuleResult.EndResponse;
-                if (context.Logger != null)
-                {
-                    var message = LoggerMessage.Define(LogLevel.Information, 114, "Redirected to canonical URL");
-                    message(context.Logger, null);
-                }
+                context.Logger?.LogInformation("Redirected from {OriginalUrl} to canonical URL {NewUrl}", originalUrl, newUrl);
             }
             else
             {

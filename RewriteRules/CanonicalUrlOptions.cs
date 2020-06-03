@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace RewriteRules
 {
     public class CanonicalUrlOptions
     {
         /// <summary>
-        /// Gets a whitelist of host names other than the primary host name that will not be swapped for the primary host name.
+        /// Gets a white-list of host names other than the primary host name that will not be swapped for the primary host name.
         /// </summary>
         public IList<HostString> AlternateHosts { get; } = new List<HostString>();
 
@@ -16,12 +18,12 @@ namespace RewriteRules
         public IList<string> ExtensionsToInclude { get; } = new List<string> { ".html", ".htm", ".aspx", ".asp" };
 
         /// <summary>
-        /// Gest or sets a value indicating whether or not the canonical URL should be lowercased.
+        /// Gets or sets a value indicating whether or not the canonical URL should be lowercased.
         /// </summary>
         public bool IsForcingLowercase { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets the primary DNS host name to to redirect to if not matched with this value and not listed in AlernateHosts.
+        /// Gets or sets the primary DNS host name to redirect to if not matched with this value and not listed in AlernateHosts.
         /// </summary>
         public HostString PrimaryHost { get; set; }
 
