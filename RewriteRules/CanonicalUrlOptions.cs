@@ -24,6 +24,11 @@ namespace RewriteRules
         public bool IsForcingLowercase { get; set; } = true;
 
         /// <summary>
+        /// Gets or sets a value indicating whether or not the rules should be applied to any query string that is present.
+        /// </summary>
+        public bool ShouldApplyToQuery { get; set; }
+
+        /// <summary>
         /// Gets or sets the primary DNS host name to redirect to if not matched with this value and not listed in AlernateHosts.
         /// </summary>
         public HostString PrimaryHost { get; set; }
