@@ -35,6 +35,9 @@ A flag to indicate whether or not the URL should be lowercased.  This defaults t
 ##### PrimaryHost
 The host name to redirect to if the DNS host name does not match this and is not listed in `AlternativeHosts`.
 
+##### ShouldApplyToQuery
+A flag to indicate whether the rules should be applied to any query string present.
+
 ##### StatusCode
 The status code to return if a redirect is determined to be needed.  This defaults to 301.
 
