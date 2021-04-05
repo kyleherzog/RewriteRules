@@ -81,7 +81,25 @@ namespace RewriteRules
 
             if (Options.IsForcingLowercase)
             {
-                newUrl = newUrl.ToLower(CultureInfo.CurrentCulture);
+                if (Options.ShouldApplyToQuery)
+                {
+                    newUrl = newUrl.ToLower(CultureInfo.CurrentCulture);
+                }
+                else
+                {
+                    var loweredHost = new HostString(host.Host.ToLower(CultureInfo.CurrentCulture));
+                    if (host.Port.HasValue)
+                    {
+                        loweredHost = new HostString(host.Host.ToLower(CultureInfo.CurrentCulture), host.Port.Value);
+                    }
+
+                    newUrl = UriHelper.BuildAbsolute(
+                        request.Scheme.ToLower(CultureInfo.CurrentCulture),
+                        loweredHost,
+                        new PathString(request.PathBase.Value.ToLower(CultureInfo.CurrentCulture)),
+                        new PathString(path.Value.ToLower(CultureInfo.CurrentCulture)),
+                        request.QueryString);
+                }
             }
 
             if (HttpUtility.UrlDecode(originalUrl) != HttpUtility.UrlDecode(newUrl))
